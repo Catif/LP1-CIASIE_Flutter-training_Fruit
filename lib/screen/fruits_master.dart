@@ -4,6 +4,7 @@ import '../widget/fruit_preview.dart';
 import '../screen/cart_screen.dart';
 import '../provider/cart_provider.dart';
 import 'package:provider/provider.dart';
+import '../widget/filter_fruit.dart';
 
 class FruitsMaster extends StatefulWidget {
   const FruitsMaster({super.key});
@@ -18,43 +19,51 @@ class _FruitsMasterState extends State<FruitsMaster> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Consumer<CartProvider>(
-            builder: (BuildContext context, CartProvider cart, widget) =>
-                Text("Total panier : ${cart.sum.toStringAsFixed(2)} €"),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.shopping_cart),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartScreen(),
-                  ),
-                );
-              },
+        appBar: AppBar(
+            title: Consumer<CartProvider>(
+              builder: (BuildContext context, CartProvider cart, widget) =>
+                  Text("Total panier : ${cart.sum.toStringAsFixed(2)} €"),
             ),
-          ]),
-      body: FutureBuilder<List<Fruit>>(
-        future: Provider.of<CartProvider>(context, listen: false).fetchFruits(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return FruitPreview(fruit: snapshot.data![index]);
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text("${snapshot.error}"),
-            );
-          }
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CartScreen(),
+                    ),
+                  );
+                },
+              ),
+            ]),
+        body: Column(
+          children: [
+            const FilterFruit(),
+            Expanded(
+              child: Consumer<CartProvider>(
+                builder: (context, cart, child) => FutureBuilder<List<Fruit>>(
+                  future: cart.getFruits(cart.filter),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return FruitPreview(fruit: snapshot.data![index]);
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text("${snapshot.error}"),
+                      );
+                    }
 
-          return const CircularProgressIndicator();
-        },
-      ),
-    );
+                    return const CircularProgressIndicator();
+                  },
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }

@@ -8,6 +8,16 @@ Chaque fruit est récupéré depuis une API REST et chaque page de détail conti
 
 - LP1 - Bradley BARBIER
 
+## Etape actuelle
+
+- [x] TP1 - Communication entre widgets et liste dynamique
+- [x] TP2 - Fruit Salad
+- [x] TP3 - PageView
+- [x] TP4 - API et FutureBuilder
+- [x] TP5 - Provider
+- [x] TP6 - Map
+- [x] TP7 - Filter
+
 ## Prérequis
 
 - [Flutter](https://flutter.dev/docs/get-started/install)

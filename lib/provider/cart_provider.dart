@@ -4,11 +4,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CartProvider extends ChangeNotifier {
+  Future<List<Fruit>> _fruits = Future.value([]);
+  String _filter = 'Tous';
   final List<Fruit> _items = [];
   double _sum = 0;
 
   List<Fruit> get items => _items;
+  String get filter => _filter;
+  set filter(String filter) => _filter = filter;
   double get sum => _sum;
+
+  CartProvider() {
+    fetchFruits();
+  }
 
   void addFruit(Fruit item, [bool notified = true]) {
     _items.add(item);
@@ -25,11 +33,9 @@ class CartProvider extends ChangeNotifier {
   }
 
   void removeFruits(Fruit item, [bool notified = true]) {
-    int i = 0;
     while (_items.contains(item)) {
       _items.remove(item);
       _sum = _sum - item.price;
-      i++;
     }
 
     notifyListeners();
@@ -39,6 +45,11 @@ class CartProvider extends ChangeNotifier {
     _items.clear();
     _sum = 0;
 
+    notifyListeners();
+  }
+
+  void setFilter(String filter) {
+    _filter = filter;
     notifyListeners();
   }
 
@@ -53,7 +64,7 @@ class CartProvider extends ChangeNotifier {
     return i;
   }
 
-  Future<List<Fruit>> fetchFruits() async {
+  void fetchFruits() async {
     List<Fruit> fruitsAPI = [];
 
     try {
@@ -70,10 +81,22 @@ class CartProvider extends ChangeNotifier {
         throw Exception('Erreur de chargement des fruits.');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
 
-    return fruitsAPI;
+    _fruits = Future.value(fruitsAPI);
+    notifyListeners();
+  }
+
+  Future<List<Fruit>> getFruits(String filter) async {
+    if (filter == 'Tous') {
+      return _fruits;
+    } else {
+      return _fruits.then((listFruits) {
+        return listFruits
+            .where((fruit) => fruit.season == filter)
+            .toList(growable: false);
+      });
+    }
   }
 }

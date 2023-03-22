@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../provider/cart_provider.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../widget/quantity_badge.dart';
 
 class FruitsDetailsScreen extends StatelessWidget {
   const FruitsDetailsScreen({super.key, required this.fruit});
@@ -15,6 +16,7 @@ class FruitsDetailsScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(fruit.name, style: const TextStyle(fontSize: 18)),
+          backgroundColor: fruit.color,
         ),
         body: Center(
             child: Column(
@@ -31,10 +33,13 @@ class FruitsDetailsScreen extends StatelessWidget {
                     Text("Saison : ${fruit.season}"),
                     Text("Stock : ${fruit.stock}"),
                     Text("Tarif à l'unité : ${fruit.price} €"),
-                    Consumer<CartProvider>(
-                      builder: (context, cart, child) => Text(
-                          "Quantité sélectionnée : ${cart.numberTypeFruitSelected(fruit)}"),
-                    ),
+                    Row(children: [
+                      Text("Quantité : "),
+                      Consumer<CartProvider>(
+                        builder: (context, cart, child) => QuantityBadge(
+                            quantity: cart.numberTypeFruitSelected(fruit)),
+                      ),
+                    ]),
                   ],
                 ),
                 Column(
