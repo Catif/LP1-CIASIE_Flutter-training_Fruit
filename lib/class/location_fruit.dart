@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class LocationFruit {
   String country;
   String countryCode;

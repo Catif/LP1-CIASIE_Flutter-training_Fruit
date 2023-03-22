@@ -10,7 +10,6 @@ class CartProvider extends ChangeNotifier {
   double _sum = 0;
 
   List<Fruit> get items => _items;
-  String get filter => _filter;
   set filter(String filter) => _filter = filter;
   double get sum => _sum;
 
@@ -55,11 +54,11 @@ class CartProvider extends ChangeNotifier {
 
   int numberTypeFruitSelected(Fruit item) {
     int i = 0;
-    _items.forEach((fruit) {
+    for (var fruit in _items) {
       if (fruit.name == item.name) {
         i++;
       }
-    });
+    }
 
     return i;
   }
