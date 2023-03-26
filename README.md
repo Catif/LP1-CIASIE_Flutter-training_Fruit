@@ -17,7 +17,7 @@ Chaque fruit est récupéré depuis une API REST et chaque page de détail conti
 - [x] TP5 - Provider
 - [x] TP6 - Map
 - [x] TP7 - Filter
-- [ ] TP8 - Sign up / Sign in
+- [x] TP8 - Sign up / Sign in
 
 ## Prérequis
 
