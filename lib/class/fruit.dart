@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'locationFruit.dart';
+import 'location_fruit.dart';
 
 class Fruit {
   String name;

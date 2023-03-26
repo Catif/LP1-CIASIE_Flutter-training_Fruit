@@ -10,7 +10,7 @@ class CartProvider extends ChangeNotifier {
   double _sum = 0;
 
   List<Fruit> get items => _items;
-  set filter(String filter) => _filter = filter;
+  String get filter => _filter;
   double get sum => _sum;
 
   CartProvider() {
